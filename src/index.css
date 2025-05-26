@@ -1,68 +1,37 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: lemonade --default, dark --prefersdark;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+@plugin "daisyui/theme" {
+  color-scheme: "light";
+  --color-base-100: oklch(99% 0.005 250); /* Blanco casi puro */
+  --color-base-200: oklch(95% 0.01 250); /* Gris muy claro */
+  --color-base-300: oklch(90% 0.01 250); /* Gris claro */
+  --color-base-content: oklch(20% 0.02 250); /* Gris oscuro para texto */
+  --color-primary: oklch(35% 0.04 250); /* Azul marino corporativo */
+  --color-primary-content: oklch(99% 0.005 250); /* Blanco para contraste */
+  --color-secondary: oklch(80% 0.02 250); /* Gris azulado claro */
+  --color-secondary-content: oklch(20% 0.02 250); /* Gris oscuro */
+  --color-accent: oklch(70% 0.04 100); /* Verde discreto para acentos */
+  --color-accent-content: oklch(20% 0.02 250); /* Gris oscuro */
+  --color-neutral: oklch(30% 0.01 250); /* Gris neutro para elementos */
+  --color-neutral-content: oklch(99% 0.005 250); /* Blanco para contraste */
+  --color-info: oklch(85% 0.04 250); /* Azul claro para info */
+  --color-info-content: oklch(20% 0.02 250); /* Gris oscuro */
+  --color-success: oklch(80% 0.04 140); /* Verde suave para éxito */
+  --color-success-content: oklch(20% 0.02 250); /* Gris oscuro */
+  --color-warning: oklch(90% 0.04 100); /* Amarillo suave para advertencia */
+  --color-warning-content: oklch(20% 0.02 250); /* Gris oscuro */
+  --color-error: oklch(80% 0.04 30); /* Rojo discreto para error */
+  --color-error-content: oklch(99% 0.005 250); /* Blanco */
+  --radius-selector: 0.5rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.5rem;
+  --size-selector: 0.15rem;
+  --size-field: 0.15rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
 }
