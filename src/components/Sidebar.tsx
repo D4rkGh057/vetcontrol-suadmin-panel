@@ -27,7 +27,7 @@ const Sidebar: React.FC = () => {
       </div>
       <nav className="flex flex-col gap-2 px-2 mt-4">
         <Link to="/dashboard" className={linkClass('/dashboard')}> <ChartBarIcon className="h-6 w-6" /> Dashboard </Link>
-        <Link to="/users" className={linkClass('/users')}> <UsersIcon className="h-6 w-6" /> Gestión </Link>
+        <Link to="/users" className={linkClass('/users')}> <UsersIcon className="h-6 w-6" /> Usuarios </Link>
         <Link to="/companies" className={linkClass('/companies')}> <BuildingOfficeIcon className="h-6 w-6" /> Empresas </Link>
       </nav>
       <Link
