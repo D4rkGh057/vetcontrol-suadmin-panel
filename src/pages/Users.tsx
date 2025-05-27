@@ -1,25 +1,59 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from '../components/Modal';
 import UserForm from '../components/UserForm';
+import { getUsers } from '../services/userService';
+import { getCompanies } from '../services/companyService';
+import type { User } from '../services/userService';
+import type { Company } from '../services/companyService';
 
 const Users: React.FC = () => {
-  // Simulación de datos de usuarios
-  const users = [
-    { id: 1, name: 'User 1', email: 'user1@example.com' },
-    { id: 2, name: 'User 2', email: 'user2@example.com' },
-    { id: 3, name: 'User 3', email: 'user3@example.com' },
-  ];
+  const [userList, setUserList] = useState<User[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
-  const [editUser, setEditUser] = useState<null | typeof users[0]>(null);
-  const [userList, setUserList] = useState(users);
+  const [editUser, setEditUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [companies, setCompanies] = useState<Company[]>([]);
 
-  const handleEdit = (user: typeof users[0]) => {
+  useEffect(() => {
+    setLoading(true);
+    Promise.all([
+      getUsers(),
+      getCompanies()
+    ])
+      .then(([users, companies]) => {
+        setUserList(users);
+        setCompanies(companies);
+      })
+      .catch((err) => console.error(err.message))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const reloadData = () => {
+    setLoading(true);
+    Promise.all([
+      getUsers(),
+      getCompanies()
+    ])
+      .then(([users, companies]) => {
+        setUserList(users);
+        setCompanies(companies);
+      })
+      .catch((err) => console.error(err.message))
+      .finally(() => setLoading(false));
+  };
+
+  const handleEdit = (user: User) => {
     setEditUser(user);
     setModalOpen(true);
   };
 
-  const handleDelete = (id: number) => {
-    setUserList((prev) => prev.filter((u) => u.id !== id));
+  const handleDelete = (id: string) => {
+    setUserList((prev) => prev.filter((u) => u.id_usuario !== id));
+  };
+
+  // Helper para obtener el nombre de la empresa
+  const getEmpresaNombre = (id_empresa: string) => {
+    const empresa = companies.find((c) => c.id_empresa === id_empresa);
+    return empresa ? empresa.nombre : '';
   };
 
   return (
@@ -37,30 +71,51 @@ const Users: React.FC = () => {
         <table className="table">
           <thead className="bg-gray-100 text-black">
             <tr>
-              <th>ID</th>
               <th>Nombre</th>
+              <th>Apellido</th>
               <th>Email</th>
+              <th>Rol</th>
+              <th>Empresa</th>
               <th className="text-right">Acciones</th>
             </tr>
           </thead>
           <tbody>
-            {userList.map((user) => (
-              <tr key={user.id}>
-                <td>{user.id}</td>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td className="flex justify-end gap-2">
-                  <button className="btn btn-xs btn-primary  text-white bg-blue-700" onClick={() => handleEdit(user)}>Editar</button>
-                  <button className="btn btn-xs btn-error bg-red-700 text-white" onClick={() => handleDelete(user.id)}>Eliminar</button>
-                </td>
-              </tr>
-            ))}
+            {loading ? (
+              Array.from({ length: 4 }).map((_, idx) => (
+                <tr key={`skeleton-user-${idx}`}>
+                  <td><div className="skeleton h-4 w-32"></div></td>
+                  <td><div className="skeleton h-4 w-32"></div></td>
+                  <td><div className="skeleton h-4 w-40"></div></td>
+                  <td><div className="skeleton h-4 w-24"></div></td>
+                  <td><div className="skeleton h-4 w-32"></div></td>
+                  <td><div className="skeleton h-4 w-24"></div></td>
+                </tr>
+              ))
+            ) : (
+              userList.map((user) => (
+                <tr key={user.id_usuario}>
+                  <td>{user.nombre}</td>
+                  <td>{user.apellido}</td>
+                  <td>{user.email}</td>
+                  <td>{user.rol}</td>
+                  <td>{getEmpresaNombre(user.id_empresa)}</td>
+                  <td className="flex justify-end gap-2">
+                    <button className="btn btn-xs btn-primary text-white bg-blue-700" onClick={() => handleEdit(user)}>Editar</button>
+                    <button className="btn btn-xs btn-error bg-red-700 text-white" onClick={() => handleDelete(user.id_usuario!)}>Eliminar</button>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
       <Modal isOpen={modalOpen} onClose={() => { setModalOpen(false); setEditUser(null); }}>
         <h2 className="text-xl font-bold mb-4 text-black">{editUser ? 'Editar Usuario Admin' : 'Crear Usuario Admin'}</h2>
-        <UserForm user={editUser} />
+        <UserForm user={editUser} companies={companies} onSuccess={() => {
+          reloadData();
+          setModalOpen(false);
+          setEditUser(null);
+        }} />
       </Modal>
     </div>
   );

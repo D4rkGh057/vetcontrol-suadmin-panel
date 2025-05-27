@@ -16,30 +16,49 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export async function createUser(user: User): Promise<User> {
   const response = await fetch(`${API_BASE_URL}/auth/register`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(user),
   });
   if (!response.ok) {
-    throw new Error('Error al registrar usuario');
+    throw new Error("Error al registrar usuario");
+  }
+  return response.json();
+}
+
+export async function updateUser(user: User): Promise<User> {
+  const token = localStorage.getItem("auth_token");
+  if (!token) {
+    throw new Error("No se encontró el token de autenticación");
+  }
+  const response = await fetch(`${API_BASE_URL}/usuarios/${user.id_usuario}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(user),
+  });
+  if (!response.ok) {
+    throw new Error("Error al actualizar usuario");
   }
   return response.json();
 }
 
 export async function getUsers(): Promise<User[]> {
-  const token = localStorage.getItem('auth_token');
+  const token = localStorage.getItem("auth_token");
   if (!token) {
-    throw new Error('No se encontró el token de autenticación');
+    throw new Error("No se encontró el token de autenticación");
   }
   const response = await fetch(`${API_BASE_URL}/usuarios`, {
     headers: {
-      'Authorization': `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     },
   });
   if (!response.ok) {
-    throw new Error('Error al obtener usuarios');
+    throw new Error("Error al obtener usuarios");
   }
   return response.json();
 }
