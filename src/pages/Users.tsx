@@ -58,7 +58,9 @@ const Users: React.FC = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Usuarios</h1>
+      <div className="bg-[#14294b] w-full rounded-lg mb-8 flex items-center px-8 py-4 shadow-md">
+        <h1 className="text-3xl font-bold text-white tracking-wide">Usuarios</h1>
+      </div>
       <div className="mb-4 flex justify-end">
         <button
           onClick={() => setModalOpen(true)}
