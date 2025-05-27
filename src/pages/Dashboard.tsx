@@ -1,14 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { UsersIcon, ShieldCheckIcon, BuildingOfficeIcon } from '@heroicons/react/24/outline';
 import { getUsers } from '../services/userService';
 import { getCompanies } from '../services/companyService';
+import { useAppStore } from '../store';
 
 const Dashboard: React.FC = () => {
-  const [userCount, setUserCount] = useState(0);
-  const [adminCount, setAdminCount] = useState(0);
-  const [companyCount, setCompanyCount] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const userCount = useAppStore((state) => state.users.length);
+  const adminCount = useAppStore((state) => state.users.filter(u => u.rol === 'admin').length);
+  const companyCount = useAppStore((state) => state.companies.length);
+  const setUserList = useAppStore((state) => state.setUsers);
+  const setCompanies = useAppStore((state) => state.setCompanies);
+  const loading = useAppStore((state) => state.loading);
+  const setLoading = useAppStore((state) => state.setLoading);
 
   useEffect(() => {
     setLoading(true);
@@ -16,9 +20,8 @@ const Dashboard: React.FC = () => {
       getUsers(),
       getCompanies()
     ]).then(([users, companies]) => {
-      setUserCount(users.length);
-      setAdminCount(users.filter(u => u.rol === 'admin').length);
-      setCompanyCount(companies.length);
+      setUserList(users);
+      setCompanies(companies);
     }).finally(() => setLoading(false));
   }, []);
 

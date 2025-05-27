@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { getCompanies } from '../services/companyService';
-import type { Company } from '../services/companyService';
+import { useAppStore } from '../store';
 import CompanyTable from '../components/CompanyTable';
 import Modal from '../components/Modal';
 import CompanyForm from '../components/CompanyForm';
 
 const Companies: React.FC = () => {
-  const [companies, setCompanies] = useState<Company[]>([]);
+  const companies = useAppStore((state) => state.companies);
+  const setCompanies = useAppStore((state) => state.setCompanies);
+  const loading = useAppStore((state) => state.loading);
+  const setLoading = useAppStore((state) => state.setLoading);
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
 
   const reloadCompanies = () => {

@@ -1,17 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Modal from '../components/Modal';
 import UserForm from '../components/UserForm';
 import { getUsers } from '../services/userService';
 import { getCompanies } from '../services/companyService';
+import { useAppStore } from '../store';
 import type { User } from '../services/userService';
-import type { Company } from '../services/companyService';
 
 const Users: React.FC = () => {
-  const [userList, setUserList] = useState<User[]>([]);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [editUser, setEditUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [companies, setCompanies] = useState<Company[]>([]);
+  const userList = useAppStore((state) => state.users);
+  const setUserList = useAppStore((state) => state.setUsers);
+  const companies = useAppStore((state) => state.companies);
+  const setCompanies = useAppStore((state) => state.setCompanies);
+  const loading = useAppStore((state) => state.loading);
+  const setLoading = useAppStore((state) => state.setLoading);
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const [editUser, setEditUser] = React.useState<User | null>(null);
 
   useEffect(() => {
     setLoading(true);
@@ -47,7 +50,8 @@ const Users: React.FC = () => {
   };
 
   const handleDelete = (id: string) => {
-    setUserList((prev) => prev.filter((u) => u.id_usuario !== id));
+    const currentUsers = useAppStore.getState().users;
+    setUserList(currentUsers.filter((u) => u.id_usuario !== id));
   };
 
   // Helper para obtener el nombre de la empresa
@@ -84,7 +88,7 @@ const Users: React.FC = () => {
           <tbody>
             {loading ? (
               Array.from({ length: 4 }).map((_, idx) => (
-                <tr key={`skeleton-user-${idx}`}>
+                <tr key={`skeleton-user-skeleton-${idx}-users`}>
                   <td><div className="skeleton h-4 w-32"></div></td>
                   <td><div className="skeleton h-4 w-32"></div></td>
                   <td><div className="skeleton h-4 w-40"></div></td>
@@ -95,7 +99,7 @@ const Users: React.FC = () => {
               ))
             ) : (
               userList.map((user) => (
-                <tr key={user.id_usuario}>
+                <tr key={user.id_usuario || user.email}>
                   <td>{user.nombre}</td>
                   <td>{user.apellido}</td>
                   <td>{user.email}</td>
@@ -103,7 +107,14 @@ const Users: React.FC = () => {
                   <td>{getEmpresaNombre(user.id_empresa)}</td>
                   <td className="flex justify-end gap-2">
                     <button className="btn btn-xs btn-primary text-white bg-blue-700" onClick={() => handleEdit(user)}>Editar</button>
-                    <button className="btn btn-xs btn-error bg-red-700 text-white" onClick={() => handleDelete(user.id_usuario!)}>Eliminar</button>
+                    <button
+                      className="btn btn-xs btn-error bg-red-700 text-white"
+                      onClick={() => {
+                        if (user.id_usuario) handleDelete(user.id_usuario);
+                      }}
+                    >
+                      Eliminar
+                    </button>
                   </td>
                 </tr>
               ))
