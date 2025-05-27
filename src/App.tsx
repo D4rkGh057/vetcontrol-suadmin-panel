@@ -4,6 +4,7 @@ import Dashboard from './pages/Dashboard';
 import Users from './pages/Users';
 import Login from './pages/Login';
 import Sidebar from './components/Sidebar';
+import Companies from './pages/Companies';
 
 const MainLayout: React.FC = () => (
   <div className="flex min-h-screen bg-gray-50">
@@ -12,6 +13,7 @@ const MainLayout: React.FC = () => (
       <Routes>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/users" element={<Users />} />
+        <Route path="/companies" element={<Companies />} />
       </Routes>
     </main>
   </div>

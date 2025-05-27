@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { UsersIcon, UserPlusIcon, HomeIcon } from '@heroicons/react/24/outline';
+import { UsersIcon, UserPlusIcon, HomeIcon, BuildingOfficeIcon } from '@heroicons/react/24/outline';
 
 const Sidebar: React.FC = () => {
   const location = useLocation();
@@ -22,10 +22,11 @@ const Sidebar: React.FC = () => {
 
   return (
     <aside className="h-screen min-h-screen w-64 bg-white shadow-lg p-4 flex flex-col gap-2 fixed md:static top-0 left-0">
-      <img src="/logo.png" alt="Logo" className="h-10 w-auto mb-4 mx-auto" />
+      <img src="/VetControl.png" alt="Logo" className="h-10 w-auto mb-4 mx-auto" />
       <nav className="flex flex-col gap-2">
         <Link to="/dashboard" className={linkClass('/')}> <HomeIcon className="h-5 w-5" /> Dashboard </Link>
         <Link to="/users" className={linkClass('/users')}> <UsersIcon className="h-5 w-5" /> Usuarios </Link>
+        <Link to="/companies" className={linkClass('/companies')}> <BuildingOfficeIcon className="h-5 w-5" /> Empresas </Link>
       </nav>
       <Link
         to={isAuthenticated ? '#' : '/login'}
