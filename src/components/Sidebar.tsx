@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { UsersIcon, UserPlusIcon, HomeIcon, BuildingOfficeIcon, ChartBarIcon } from '@heroicons/react/24/outline';
+import { UsersIcon, BuildingOfficeIcon, ChartBarIcon, ArrowLeftStartOnRectangleIcon } from '@heroicons/react/24/outline';
 
 const Sidebar: React.FC = () => {
   const location = useLocation();
@@ -39,7 +39,7 @@ const Sidebar: React.FC = () => {
             : 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-400'
         }`}
       >
-        <UserPlusIcon className="h-6 w-6" /> {isAuthenticated ? 'Cerrar sesión' : 'Iniciar sesión'}
+        <ArrowLeftStartOnRectangleIcon className="h-6 w-6" /> {isAuthenticated ? 'Cerrar sesión' : 'Iniciar sesión'}
       </Link>
     </aside>
   );
